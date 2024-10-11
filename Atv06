@@ -1,0 +1,22 @@
+from google.colab import drive
+import pandas as pd
+
+# Monta o Google Drive
+drive.mount('/content/drive')
+
+# Carrega o arquivo CSV
+filepath = "/content/drive/MyDrive/NOME_DO_ARQUIVO"
+database = pd.read_csv(filepath)
+
+filmes_agrupados = database.groupby('Filme').agg(
+    media_nota=('Nota', 'mean'),
+    num_espectadores=('Filme', 'count')
+).reset_index()
+
+
+print(filmes_agrupados.head())
+
+filme_maior_media = filmes_agrupados.loc[filmes_agrupados['media_nota'].idxmax(), 'Filme']
+maior_media = filmes_agrupados['media_nota'].max()
+
+print(f"O filme com a maior média é '{filme_maior_media}' com uma média de {maior_media:.2f}")
